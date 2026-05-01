@@ -1,89 +1,11 @@
---================ KEY SYSTEM =================--
 
-local REQUIRED_KEY = "Golf" -- change this
-
+-- // Services
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Players = game:GetService("Players")
+local UIS = game:GetService("UserInputService")
+
 local LocalPlayer = Players.LocalPlayer
 local PlayerGui = LocalPlayer:WaitForChild("PlayerGui")
-
-local KeyGui = Instance.new("ScreenGui")
-KeyGui.Name = "KeySystem"
-KeyGui.Parent = PlayerGui
-KeyGui.ResetOnSpawn = false
-
-local KeyFrame = Instance.new("Frame")
-KeyFrame.Size = UDim2.new(0, 260, 0, 140)
-KeyFrame.Position = UDim2.new(0.5, -130, 0.5, -70)
-KeyFrame.BackgroundColor3 = Color3.fromRGB(20,20,20)
-KeyFrame.Parent = KeyGui
-Instance.new("UICorner", KeyFrame).CornerRadius = UDim.new(0,10)
-
-local KeyTitle = Instance.new("TextLabel")
-KeyTitle.Size = UDim2.new(1,0,0,30)
-KeyTitle.BackgroundTransparency = 1
-KeyTitle.Text = "🔐 Enter Key"
-KeyTitle.Font = Enum.Font.GothamBold
-KeyTitle.TextSize = 16
-KeyTitle.TextColor3 = Color3.new(1,1,1)
-KeyTitle.Parent = KeyFrame
-
-local KeyBox = Instance.new("TextBox")
-KeyBox.Size = UDim2.new(0.8,0,0,30)
-KeyBox.Position = UDim2.new(0.1,0,0.4,0)
-KeyBox.PlaceholderText = "Enter key..."
-KeyBox.Text = ""
-KeyBox.Font = Enum.Font.Gotham
-KeyBox.TextSize = 14
-KeyBox.TextColor3 = Color3.new(1,1,1)
-KeyBox.BackgroundColor3 = Color3.fromRGB(30,30,30)
-KeyBox.Parent = KeyFrame
-Instance.new("UICorner", KeyBox).CornerRadius = UDim.new(0,6)
-
-local Submit = Instance.new("TextButton")
-Submit.Size = UDim2.new(0.5,0,0,30)
-Submit.Position = UDim2.new(0.25,0,0.7,0)
-Submit.Text = "Unlock"
-Submit.Font = Enum.Font.GothamBold
-Submit.TextSize = 14
-Submit.TextColor3 = Color3.new(1,1,1)
-Submit.BackgroundColor3 = Color3.fromRGB(0,170,100)
-Submit.Parent = KeyFrame
-Instance.new("UICorner", Submit).CornerRadius = UDim.new(0,6)
-
-local Status = Instance.new("TextLabel")
-Status.Size = UDim2.new(1,0,0,20)
-Status.Position = UDim2.new(0,0,1,-20)
-Status.BackgroundTransparency = 1
-Status.Text = ""
-Status.Font = Enum.Font.Gotham
-Status.TextSize = 13
-Status.TextColor3 = Color3.fromRGB(255,80,80)
-Status.Parent = KeyFrame
-
-local Unlocked = false
-
-Submit.MouseButton1Click:Connect(function()
-	if KeyBox.Text == REQUIRED_KEY then
-		Unlocked = true
-
-		-- properly remove UI
-		KeyGui.Enabled = false
-		KeyFrame.Visible = false
-		
-		task.wait() -- small yield to ensure it disappears
-		
-		KeyGui:Destroy()
-	else
-		Status.Text = "Invalid key"
-	end
-end)
-
-repeat task.wait() until Unlocked
-
---================ ORIGINAL SCRIPT =================--
-
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
-local UIS = game:GetService("UserInputService")
 
 -- // Vars
 local POWER_MULTIPLIER = 1.35
@@ -110,8 +32,69 @@ local ScreenGui = Instance.new("ScreenGui")
 ScreenGui.Name = "GolfUI"
 ScreenGui.Parent = PlayerGui
 ScreenGui.ResetOnSpawn = false
+ScreenGui.Enabled = false
 
--- DOT
+-- PASSWORD SYSTEM
+local PASSWORD = "6969"
+
+local PasswordGui = Instance.new("ScreenGui")
+PasswordGui.Name = "PasswordUI"
+PasswordGui.Parent = PlayerGui
+PasswordGui.ResetOnSpawn = false
+PasswordGui.IgnoreGuiInset = true
+
+local PassFrame = Instance.new("Frame")
+PassFrame.Size = UDim2.new(0, 240, 0, 300)
+PassFrame.Position = UDim2.new(0.0, 20, 0.5, -150)
+PassFrame.BackgroundColor3 = Color3.fromRGB(18,18,18)
+PassFrame.Parent = PasswordGui
+Instance.new("UICorner", PassFrame).CornerRadius = UDim.new(0,10)
+Instance.new("UIStroke", PassFrame).Color = Color3.fromRGB(60,60,60)
+
+local PassTitle = Instance.new("TextLabel")
+PassTitle.Size = UDim2.new(1,0,0,30)
+PassTitle.BackgroundTransparency = 1
+PassTitle.Text = "Enter Password"
+PassTitle.Font = Enum.Font.GothamBold
+PassTitle.TextSize = 16
+PassTitle.TextColor3 = Color3.new(1,1,1)
+PassTitle.Parent = PassFrame
+
+local PassBox = Instance.new("TextBox")
+PassBox.Size = UDim2.new(0.8,0,0,32)
+PassBox.Position = UDim2.new(0.1,0,0,45)
+PassBox.BackgroundColor3 = Color3.fromRGB(35,35,35)
+PassBox.PlaceholderText = "Password"
+PassBox.TextColor3 = Color3.new(1,1,1)
+PassBox.Font = Enum.Font.Gotham
+PassBox.TextSize = 14
+PassBox.Parent = PassFrame
+Instance.new("UICorner", PassBox).CornerRadius = UDim.new(0,6)
+
+local SubmitBtn = Instance.new("TextButton")
+SubmitBtn.Size = UDim2.new(0.8,0,0,32)
+SubmitBtn.Position = UDim2.new(0.1,0,0,90)
+SubmitBtn.BackgroundColor3 = Color3.fromRGB(0,120,255)
+SubmitBtn.Text = "Unlock"
+SubmitBtn.TextColor3 = Color3.new(1,1,1)
+SubmitBtn.Font = Enum.Font.GothamBold
+SubmitBtn.TextSize = 14
+SubmitBtn.Parent = PassFrame
+Instance.new("UICorner", SubmitBtn).CornerRadius = UDim.new(0,6)
+
+SubmitBtn.MouseButton1Click:Connect(function()
+	if PassBox.Text == PASSWORD then
+		ScreenGui.Enabled = true
+		PasswordGui:Destroy()
+	else
+		SubmitBtn.Text = "Wrong!"
+		task.wait(0.5)
+		SubmitBtn.Text = "Unlock"
+	end
+end)
+
+-- 🔴 STATUS DOT (SEPARATE GUI - ALWAYS VISIBLE)
+
 local DotGui = Instance.new("ScreenGui")
 DotGui.Name = "GolfDotUI"
 DotGui.Parent = PlayerGui
@@ -120,12 +103,13 @@ DotGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 DotGui.IgnoreGuiInset = true
 
 local StatusDot = Instance.new("Frame")
-StatusDot.Size = UDim2.new(0,6,0,6)
+StatusDot.Size = UDim2.new(0,6,0,6) -- SMALLER
 StatusDot.Position = UDim2.new(0,6,0,6)
 StatusDot.BackgroundColor3 = Color3.fromRGB(120,0,0)
 StatusDot.BorderSizePixel = 0
 StatusDot.ZIndex = 999
 StatusDot.Parent = DotGui
+
 Instance.new("UICorner", StatusDot).CornerRadius = UDim.new(1,0)
 
 local function UpdateDot()
@@ -141,13 +125,15 @@ Frame.Size = UDim2.new(0, 240, 0, 300)
 Frame.Position = UDim2.new(0, 20, 0.5, -150)
 Frame.BackgroundColor3 = Color3.fromRGB(18,18,18)
 Frame.Parent = ScreenGui
+
 Instance.new("UICorner", Frame).CornerRadius = UDim.new(0,10)
 Instance.new("UIStroke", Frame).Color = Color3.fromRGB(60,60,60)
 
+-- Title
 local TitleBar = Instance.new("TextLabel")
 TitleBar.Size = UDim2.new(1,0,0,30)
 TitleBar.BackgroundTransparency = 1
-TitleBar.Text = "⛳ Golf Assist"
+TitleBar.Text = "⛳ Somebody's Closer"
 TitleBar.Font = Enum.Font.GothamBold
 TitleBar.TextSize = 16
 TitleBar.TextColor3 = Color3.new(1,1,1)
@@ -161,8 +147,10 @@ Credit.Text = "made by R10TSypher"
 Credit.Font = Enum.Font.Gotham
 Credit.TextSize = 14
 Credit.TextColor3 = Color3.fromRGB(140,140,140)
+Credit.TextTransparency = 0.2
 Credit.Parent = Frame
 
+-- Power Label
 local Label = Instance.new("TextLabel")
 Label.Size = UDim2.new(1,0,0,20)
 Label.Position = UDim2.new(0,0,0,50)
@@ -173,6 +161,7 @@ Label.TextColor3 = Color3.fromRGB(200,200,200)
 Label.Text = "Power: " .. POWER_MULTIPLIER
 Label.Parent = Frame
 
+-- Distance Label
 local DistanceLabel = Instance.new("TextLabel")
 DistanceLabel.Size = UDim2.new(1,0,0,20)
 DistanceLabel.Position = UDim2.new(0,0,0,70)
@@ -242,7 +231,8 @@ local MenuBindBtn = createBind("Menu Key: CTRL", 200)
 local GreenBindBtn = createBind("Green Key: G", 232)
 local AceBindBtn = createBind("Auto Ace Key: H", 264)
 
--- DRAG
+--================ DRAG =================--
+
 local dragging = false
 local dragStart, startPos
 
@@ -257,15 +247,23 @@ end)
 UIS.InputChanged:Connect(function(input)
 	if dragging and input.UserInputType == Enum.UserInputType.MouseMovement then
 		local delta = input.Position - dragStart
-		Frame.Position = UDim2.new(startPos.X.Scale,startPos.X.Offset + delta.X,startPos.Y.Scale,startPos.Y.Offset + delta.Y)
+		Frame.Position = UDim2.new(
+			startPos.X.Scale,
+			startPos.X.Offset + delta.X,
+			startPos.Y.Scale,
+			startPos.Y.Offset + delta.Y
+		)
 	end
 end)
 
 UIS.InputEnded:Connect(function(input)
-	if input.UserInputType == Enum.UserInputType.MouseButton1 then dragging = false end
+	if input.UserInputType == Enum.UserInputType.MouseButton1 then
+		dragging = false
+	end
 end)
 
--- BUTTON LOGIC
+--================ BUTTON LOGIC =================--
+
 GreenButton.MouseButton1Click:Connect(function()
 	GreenAssistEnabled = not GreenAssistEnabled
 	GreenButton.Text = "Green Assist: " .. (GreenAssistEnabled and "ON" or "OFF")
@@ -279,9 +277,70 @@ AceButton.MouseButton1Click:Connect(function()
 	AceButton.BackgroundColor3 = AutoAceEnabled and Color3.fromRGB(200,120,0) or Color3.fromRGB(30,30,30)
 end)
 
--- KEYBINDS
+-- Bind UI
+MenuBindBtn.MouseButton1Click:Connect(function()
+	bindingMenu = true
+	MenuBindBtn.Text = "Press key..."
+end)
+
+GreenBindBtn.MouseButton1Click:Connect(function()
+	bindingGreen = true
+	GreenBindBtn.Text = "Press key..."
+end)
+
+AceBindBtn.MouseButton1Click:Connect(function()
+	bindingAce = true
+	AceBindBtn.Text = "Press key..."
+end)
+
+-- Slider
+local sliding = false
+Knob.MouseButton1Down:Connect(function() sliding = true end)
+
+UIS.InputChanged:Connect(function(input)
+	if sliding and input.UserInputType == Enum.UserInputType.MouseMovement then
+		local relative = (input.Position.X - Slider.AbsolutePosition.X) / Slider.AbsoluteSize.X
+		relative = math.clamp(relative, 0, 1)
+
+		Fill.Size = UDim2.new(relative,0,1,0)
+		Knob.Position = UDim2.new(relative,-8,0.5,-8)
+
+		POWER_MULTIPLIER = math.floor((1 + relative * 2) * 100) / 100
+		Label.Text = "Power: " .. POWER_MULTIPLIER
+	end
+end)
+
+UIS.InputEnded:Connect(function(input)
+	if input.UserInputType == Enum.UserInputType.MouseButton1 then
+		sliding = false
+	end
+end)
+
+--================ KEYBINDS =================--
+
 UIS.InputBegan:Connect(function(input, gpe)
 	if gpe then return end
+
+	if bindingMenu then
+		MenuKey = input.KeyCode
+		MenuBindBtn.Text = "Menu Key: " .. input.KeyCode.Name
+		bindingMenu = false
+		return
+	end
+
+	if bindingGreen then
+		GreenKey = input.KeyCode
+		GreenBindBtn.Text = "Green Key: " .. input.KeyCode.Name
+		bindingGreen = false
+		return
+	end
+
+	if bindingAce then
+		AceKey = input.KeyCode
+		AceBindBtn.Text = "Auto Ace Key: " .. input.KeyCode.Name
+		bindingAce = false
+		return
+	end
 
 	if input.KeyCode == MenuKey then
 		ScreenGui.Enabled = not ScreenGui.Enabled
@@ -303,7 +362,49 @@ end)
 
 UpdateDot()
 
---================ HOOK (UNCHANGED) =================--
+--================ COURSE + DISTANCE =================--
+
+local function GetCourseModel()
+	for _, v in pairs(workspace:GetChildren()) do
+		if v:IsA("Model") and v.Name:lower():find("course") then
+			return v
+		end
+	end
+end
+
+task.spawn(function()
+	while true do
+		local leaderstats = LocalPlayer:FindFirstChild("leaderstats")
+		if leaderstats and leaderstats:FindFirstChild("Hole") then
+			local hole = string.format("%03d", leaderstats.Hole.Value)
+			local course = GetCourseModel()
+
+			local success, pos = pcall(function()
+				return GetCupLocation:InvokeServer(hole, course and course.Name or nil)
+			end)
+
+			if success and typeof(pos) == "Vector3" then
+				TargetCupPos = pos
+			end
+		end
+		task.wait(0.75)
+	end
+end)
+
+task.spawn(function()
+	while true do
+		local char = LocalPlayer.Character
+		if char and char:FindFirstChild("HumanoidRootPart") and TargetCupPos then
+			local yards = (TargetCupPos - char.HumanoidRootPart.Position).Magnitude / 3
+			DistanceLabel.Text = "Distance: " .. math.floor(yards) .. " yards"
+		else
+			DistanceLabel.Text = "Distance: ..."
+		end
+		task.wait(0.2)
+	end
+end)
+
+--================ HOOK =================--
 
 local OldNewIndex
 OldNewIndex = hookmetamethod(game, "__newindex", function(self, index, value)
@@ -321,6 +422,42 @@ OldNewIndex = hookmetamethod(game, "__newindex", function(self, index, value)
 
 		if speed < 2 then
 			boostedBalls[self] = nil
+		end
+
+		if GreenAssistEnabled and TargetCupPos then
+			local toHole = TargetCupPos - self.Position
+			local dist = toHole.Magnitude
+
+			if speed > 0.05 then
+				local dir = value.Unit
+				local holeDir = toHole.Unit
+				local align = dir:Dot(holeDir)
+
+				if align < 0.75 then
+					if dist < 12 then value *= 0.6 end
+					if dist < 6 then value *= 0.3 end
+					if dist < 3 then value = Vector3.zero end
+				else
+					local strength = math.clamp(0.15 + (1-align) + (dist/200), 0.15, 0.4)
+					value = dir:Lerp(holeDir, strength) * speed
+				end
+			end
+		end
+
+		if AutoAceEnabled and TargetCupPos then
+			local delta = TargetCupPos - self.Position
+			local dist = Vector3.new(delta.X,0,delta.Z).Magnitude
+
+			if dist > 0.5 then
+				local t = math.clamp(dist/30, 0.4, 1.2)
+				local g = 35.037
+
+				return OldNewIndex(self, index, Vector3.new(
+					delta.X/t,
+					(delta.Y + 0.5*g*t*t)/t,
+					delta.Z/t
+				))
+			end
 		end
 	end
 
